@@ -12,6 +12,7 @@ const addButton = document.getElementById('add');
 const equalsButton = document.getElementById('equals');
 
 var number = '';
+var operatorActive = false;
 
 function clearDisplay() {
     calculatorDisplay.textContent = '0';
@@ -25,7 +26,6 @@ function clearDisplay() {
 
 function saveNumber() {
     number = parseFloat(calculatorDisplay.textContent);
-    calculatorDisplay.textContent = '0';
     return number;
 }
 
@@ -33,7 +33,7 @@ clearDisplay();
 
 numbers.forEach(number => {
     number.addEventListener('click', () => {
-        if (calculatorDisplay.textContent === '0') {
+        if (calculatorDisplay.textContent === '0' || operatorActive === true) {
             calculatorDisplay.textContent = number.textContent;
         } else if (calculatorDisplay.textContent.length < 11) {
             if (calculatorDisplay.textContent.length === 6) {
@@ -73,6 +73,7 @@ operators.forEach(operator => {
 
         if (operator !== equalsButton) {
             number = saveNumber();
+            operatorActive = true;
             calculatorDisplay.style.fontSize = '86px';
             selectedOperator = operator.textContent;
             operator.style.backgroundColor = 'white';
