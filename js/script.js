@@ -104,7 +104,22 @@ plusMinusButton.addEventListener('click', () => {
 });
 
 percentageButton.addEventListener('click', () => {
-    calculatorDisplay.textContent = parseFloat(calculatorDisplay.textContent.replace(',', '.')) / 100;
+    let result = parseFloat(calculatorDisplay.textContent.replace(',', '.')) / 100;
+
+    result = result.toString().replace('.', ',');
+
+    if (result.length > 10) {
+        result = parseFloat(result).toExponential(2);
+        calculatorDisplay.style.fontSize = '84px';
+    } else if (result.length === 7) {
+        calculatorDisplay.style.fontSize = '64px';
+    } else if (result.length > 7 && result.length < 10) {
+        calculatorDisplay.style.fontSize = '52px';
+    } else if (result.length === 10) {
+        calculatorDisplay.style.fontSize = '48px';
+    }
+
+    calculatorDisplay.textContent = result;
 });
 
 allClearButton.addEventListener('click', clearDisplay);
