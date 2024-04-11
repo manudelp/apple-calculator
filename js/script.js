@@ -13,7 +13,6 @@ const equalsButton = document.getElementById('equals');
 var number = '';
 
 function clearDisplay() {
-    console.log('cleared display');
     calculatorDisplay.textContent = '0';
     calculatorDisplay.style.fontSize = '86px';
 
@@ -24,7 +23,6 @@ function clearDisplay() {
 }
 
 function saveNumber() {
-    console.log('saved number: ' + calculatorDisplay.textContent);
     number = parseFloat(calculatorDisplay.textContent);
     calculatorDisplay.textContent = '0';
     return number;
@@ -34,7 +32,6 @@ clearDisplay();
 
 numbers.forEach(number => {
     number.addEventListener('click', () => {
-        console.log('number clicked: ' + number.textContent)
         if (calculatorDisplay.textContent === '0') {
             calculatorDisplay.textContent = number.textContent;
         } else if (calculatorDisplay.textContent.length < 11) {
@@ -94,19 +91,13 @@ equalsButton.addEventListener('click', () => {
         case '+':
             result = parseFloat(number + currentValue);
             break;
-    }
+    } 
 
-    // Check if the result is too long
-    if (calculatorDisplay.textContent.length > 10) {
-        clearDisplay();
-        calculatorDisplay.textContent = 'Error';
-    }
-
-    // Check if the result is a whole number
-    if (result % 1 !== 0) {
-        calculatorDisplay.textContent = result.toFixed(2);
+    if (result.toString().length > 10) {
+        compressedResult = result.toExponential(2);
+        calculatorDisplay.style.fontSize = '84px';
+        calculatorDisplay.textContent = compressedResult;
     } else {
         calculatorDisplay.textContent = result;
     }
-    
 });
