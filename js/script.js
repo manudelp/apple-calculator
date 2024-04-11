@@ -45,9 +45,6 @@ function updateDisplay(value) {
     }
 }
 
-
-
-
 function calculateResult() {
     let result;
     const currentValue = parseFloat(currentNumber.replace(',', '.'));
