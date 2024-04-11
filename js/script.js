@@ -3,6 +3,7 @@ const numbers = document.querySelectorAll('.numbers__button');
 const operators = document.querySelectorAll('.operators__button');
 const allClearButton = document.getElementById('allClear');
 const plusMinusButton = document.getElementById('plusMinus');
+const percentageButton = document.getElementById('percentage');
 const commaButton = document.getElementById('comma');
 const divideButton = document.getElementById('divide');
 const multiplyButton = document.getElementById('multiply');
@@ -46,6 +47,14 @@ numbers.forEach(number => {
             calculatorDisplay.textContent += number.textContent;
         }
     });
+});
+
+plusMinusButton.addEventListener('click', () => {
+    calculatorDisplay.textContent = parseFloat(calculatorDisplay.textContent) * -1;
+});
+
+percentageButton.addEventListener('click', () => {
+    calculatorDisplay.textContent = 'Nah bro';
 });
 
 allClearButton.addEventListener('click', clearDisplay);
