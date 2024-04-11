@@ -4,110 +4,129 @@ const operators = document.querySelectorAll('.operators__button');
 const allClearButton = document.getElementById('allClear');
 const plusMinusButton = document.getElementById('plusMinus');
 const percentageButton = document.getElementById('percentage');
-const commaButton = document.getElementById('comma');
-const divideButton = document.getElementById('divide');
-const multiplyButton = document.getElementById('multiply');
-const subtractButton = document.getElementById('subtract');
-const addButton = document.getElementById('add');
 const equalsButton = document.getElementById('equals');
 
-var number = '';
-var operatorActive = false;
+let currentNumber = '';
+let operatorActive = false;
+let selectedOperator;
 
 function clearDisplay() {
     calculatorDisplay.textContent = '0';
     calculatorDisplay.style.fontSize = '86px';
-
-    operators.forEach(operator => {
-        operator.style.backgroundColor = '#ff9f09';
-        operator.style.color = 'white';
-    });
+    operatorActive = false;
 }
 
-function saveNumber() {
-    number = parseFloat(calculatorDisplay.textContent);
-    return number;
+function updateDisplay(value) {
+    if (calculatorDisplay.textContent === '0' || operatorActive) {
+        calculatorDisplay.textContent = '';
+        operatorActive = false;
+    }
+
+    // If the entered value is a comma and there is no comma present yet
+    if (value === ',' && calculatorDisplay.textContent.indexOf(',') === -1) {
+        // If the display is empty, add a leading zero before the comma
+        if (calculatorDisplay.textContent === '') {
+            calculatorDisplay.textContent += '0' + value;
+        } else {
+            calculatorDisplay.textContent += value;
+        }
+    } else if (value !== ',') { // Exclude comma from adding to display length
+        if (calculatorDisplay.textContent.length < 10) {
+            calculatorDisplay.textContent += value;
+        }
+    }
+
+    // Lower font size to 64px when the display reaches 6 characters
+    if (calculatorDisplay.textContent.length === 7) {
+        calculatorDisplay.style.fontSize = '64px';
+    }
+    if (calculatorDisplay.textContent.length === 9) {
+        calculatorDisplay.style.fontSize = '54px';
+    }
+}
+
+
+
+
+function calculateResult() {
+    let result;
+    const currentValue = parseFloat(currentNumber.replace(',', '.'));
+    const enteredValue = parseFloat(calculatorDisplay.textContent.replace(',', '.'));
+
+    switch (selectedOperator) {
+        case '/':
+            if (enteredValue !== 0) {
+                result = currentValue / enteredValue;
+            } else {
+                calculatorDisplay.textContent = 'Error';
+                return;
+            }
+            break;
+        case '×':
+            result = currentValue * enteredValue;
+            break;
+        case '-':
+            result = currentValue - enteredValue;
+            break;
+        case '+':
+            result = currentValue + enteredValue;
+            break;
+    }
+
+    result = result.toString().replace('.', ','); 
+    console.log(result);
+
+    if (result.length > 10) {
+        result = parseFloat(result).toExponential(2);
+        calculatorDisplay.style.fontSize = '84px';
+    }
+
+    if (result.length === 7) {
+        calculatorDisplay.style.fontSize = '64px';
+    }
+    if (result.length > 7 && result.length < 10) {
+        calculatorDisplay.style.fontSize = '52px';
+    }
+    if (result.length === 10) {
+        calculatorDisplay.style.fontSize = '48px';
+    }
+
+    calculatorDisplay.textContent = result;
 }
 
 clearDisplay();
 
 numbers.forEach(number => {
     number.addEventListener('click', () => {
-        if (calculatorDisplay.textContent === '0' || operatorActive === true) {
-            calculatorDisplay.textContent = number.textContent;
-        } else if (calculatorDisplay.textContent.length < 11) {
-            if (calculatorDisplay.textContent.length === 6) {
-                calculatorDisplay.style.fontSize = '64px';
-            }
-
-            if (calculatorDisplay.textContent.length === 8) {
-                calculatorDisplay.style.fontSize = '48px';
-            }
-
-            calculatorDisplay.textContent += number.textContent;
-        }
+        updateDisplay(number.textContent);
     });
 });
 
 plusMinusButton.addEventListener('click', () => {
-    calculatorDisplay.textContent = parseFloat(calculatorDisplay.textContent) * -1;
+    calculatorDisplay.textContent = parseFloat(calculatorDisplay.textContent.replace(',', '.')) * -1;
 });
 
 percentageButton.addEventListener('click', () => {
-    calculatorDisplay.textContent = 'Nah bro';
+    calculatorDisplay.textContent = parseFloat(calculatorDisplay.textContent.replace(',', '.')) / 100;
 });
 
 allClearButton.addEventListener('click', clearDisplay);
 
-let selectedOperator;
-
 operators.forEach(operator => {
     operator.addEventListener('click', () => {
-
         operators.forEach(op => {
-            if(op !== operator) {
-                op.style.backgroundColor = '#ff9f09';
-                op.style.color = 'white';
+            if (op !== operator) {
+                op.classList.remove('active');
             }
         });
 
         if (operator !== equalsButton) {
-            number = saveNumber();
+            operator.classList.add('active');
+            currentNumber = calculatorDisplay.textContent;
             operatorActive = true;
-            calculatorDisplay.style.fontSize = '86px';
             selectedOperator = operator.textContent;
-            operator.style.backgroundColor = 'white';
-            operator.style.color = 'black';
+        } else {
+            calculateResult();
         }
-
     });
-});
-
-
-equalsButton.addEventListener('click', () => {
-    const currentValue = parseFloat(calculatorDisplay.textContent);
-    let result;
-    
-    switch (selectedOperator) {
-        case '/':
-            result = parseFloat(number / currentValue);
-            break;
-        case '×':
-            result = parseFloat(number * currentValue);
-            break;
-        case '-':
-            result = parseFloat(number - currentValue);
-            break;
-        case '+':
-            result = parseFloat(number + currentValue);
-            break;
-    } 
-
-    if (result.toString().length > 10) {
-        compressedResult = result.toExponential(2);
-        calculatorDisplay.style.fontSize = '84px';
-        calculatorDisplay.textContent = compressedResult;
-    } else {
-        calculatorDisplay.textContent = result;
-    }
 });
