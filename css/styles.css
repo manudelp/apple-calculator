@@ -48,7 +48,8 @@ button:active {
 
 .calculator {
     width: 375px;
-    height: 95vh;
+    height: 840px;
+    aspect-ratio: 375/840;
     background-color: #000;
     border: 8px solid #111111;
     border-radius: 44px;
