@@ -17,7 +17,7 @@ function clearDisplay() {
 }
 
 function updateDisplay(value) {
-    if (calculatorDisplay.textContent === '0' || operatorActive) {
+    if (calculatorDisplay.textContent === '0' || operatorActive || calculatorDisplay.textContent === 'Error' || calculatorDisplay.textContent === 'NaN') {
         calculatorDisplay.textContent = '';
         operatorActive = false;
     }
@@ -52,7 +52,12 @@ function calculateResult() {
 
     switch (selectedOperator) {
         case '÷':
-            result = currentValue / enteredValue;
+            if (enteredValue !== 0) {
+                result = currentValue / enteredValue;
+            } else {
+                calculatorDisplay.textContent = 'Error';
+                return;
+            }
             break;
         case '×':
             result = currentValue * enteredValue;
@@ -68,19 +73,26 @@ function calculateResult() {
     result = result.toString().replace('.', ','); 
     console.log(result);
 
-    if (result.length > 10) {
+    if (result.length > 10 && !result.includes(',')) {
         result = parseFloat(result).toExponential(2);
         calculatorDisplay.style.fontSize = '84px';
     }
 
     if (result.length === 7) {
         calculatorDisplay.style.fontSize = '64px';
-    }
-    if (result.length > 7 && result.length < 10) {
+    } else if (result.length >= 8 && result.length <= 9) {
         calculatorDisplay.style.fontSize = '52px';
-    }
-    if (result.length === 10) {
+    } else if (result.length === 10) {
         calculatorDisplay.style.fontSize = '48px';
+    }
+    
+
+    if (result.includes(',')) {
+        let parts = result.split(',');
+        if (parts.length > 1 && parts[1].length > 6) {
+            result = parts[0] + ',' + parts[1].slice(0, 6) + '...';
+            calculatorDisplay.style.fontSize = '64px';
+        }
     }
 
     calculatorDisplay.textContent = result;
