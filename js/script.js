@@ -22,21 +22,18 @@ function updateDisplay(value) {
         operatorActive = false;
     }
 
-    // If the entered value is a comma and there is no comma present yet
     if (value === ',' && calculatorDisplay.textContent.indexOf(',') === -1) {
-        // If the display is empty, add a leading zero before the comma
         if (calculatorDisplay.textContent === '') {
             calculatorDisplay.textContent += '0' + value;
         } else {
             calculatorDisplay.textContent += value;
         }
-    } else if (value !== ',') { // Exclude comma from adding to display length
+    } else if (value !== ',') {
         if (calculatorDisplay.textContent.length < 10) {
             calculatorDisplay.textContent += value;
         }
     }
 
-    // Lower font size to 64px when the display reaches 6 characters
     if (calculatorDisplay.textContent.length === 7) {
         calculatorDisplay.style.fontSize = '64px';
     }
@@ -56,7 +53,6 @@ function calculateResult() {
                 result = currentValue / enteredValue;
             } else {
                 calculatorDisplay.textContent = 'Error';
-                return;
             }
             break;
         case '×':
