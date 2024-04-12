@@ -51,13 +51,8 @@ function calculateResult() {
     const enteredValue = parseFloat(calculatorDisplay.textContent.replace(',', '.'));
 
     switch (selectedOperator) {
-        case '/':
-            if (enteredValue !== 0) {
-                result = currentValue / enteredValue;
-            } else {
-                calculatorDisplay.textContent = 'Error';
-                return;
-            }
+        case '÷':
+            result = currentValue / enteredValue;
             break;
         case '×':
             result = currentValue * enteredValue;
